@@ -22,7 +22,7 @@ public class Main {
          String [][] maze = getMaze("src/Input");
         MazeSolver parttwo = new MazeSolver(maze);
         ArrayList<String> pathWithoutDupes = parttwo.solve();
-        System.out.println(pathWithoutDupes);
+//        System.out.println(pathWithoutDupes);
         ArrayList<String> pathWithoutDupesFixed = fixPathPartTwo(pathWithoutDupes);
         PrintPartTwo(pathWithoutDupesFixed);
 
@@ -91,10 +91,10 @@ public class Main {
 //                        System.out.println(p1y + "p");
 //                        System.out.println(p1x);
 //                        System.out.println(backwardsCount);
-                        if (backwardsCount == 6 && correctX == 35)
-                        {
-                            System.out.println(Arrays.toString(pair1));
-                        }
+//                        if (backwardsCount == 6 && correctX == 35)
+//                        {
+//                            System.out.println(Arrays.toString(pair1));
+//                        }
                         if ((Math.abs(correctY - p1y) <= 1 && Math.abs(correctX - p1x) == 0
                         || Math.abs(correctY - p1y) == 0 && Math.abs(correctX - p1x) <= 1))
                         {
@@ -105,19 +105,19 @@ public class Main {
                 }
 //                System.out.println(indexEnd - backwardsCount);
 //                System.out.println(path.size() + "lk");
-                if (correctX == 35)
-                {
-                    System.out.println(indexEnd - backwardsCount);
-                    System.out.println(path.get(indexEnd));
-                    System.out.println(backwardsCount);
-                    System.out.println(path.get(66));
-                }
+//                if (correctX == 35)
+//                {
+//                    System.out.println(indexEnd - backwardsCount);
+//                    System.out.println(path.get(indexEnd));
+//                    System.out.println(backwardsCount);
+//                    System.out.println(path.get(66));
+//                }
                 for (int j = indexEnd; j > indexEnd - backwardsCount; j--)
                 {
-                    if (correctX == 35)
-                    {
-                        System.out.println(path.get(j));
-                    }
+//                    if (correctX == 35)
+//                    {
+//                        System.out.println(path.get(j));
+//                    }
                     path.remove(j);
 
                 }
