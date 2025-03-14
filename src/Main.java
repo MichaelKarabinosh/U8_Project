@@ -19,6 +19,8 @@ public class Main {
         System.out.println(partOne(maze, 0, 0));
 
         System.out.println("hello");
+        MazeSolver parttwo = new MazeSolver(maze);
+        System.out.println(parttwo.solve());
 
     }
 
@@ -65,6 +67,8 @@ public class Main {
         }
         return path;
     }
+
+
 
     public static String[][] getMaze(String fileName) {
         File f = new File(fileName);
