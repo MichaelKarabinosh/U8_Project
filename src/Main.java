@@ -2,21 +2,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static java.util.Collections.replaceAll;
 
 public class Main {
     public static void main(String[] args) {
 
 
-//     for (String[] array: maxe)
-//     {
-//         System.out.println(Arrays.toString(array));
-//     }
 
-
-
-//         String[][] maze = getMaze("src/Input");
-//        System.out.println(partOne(maze, 0, 0));
 
 //        System.out.println("hello");
          String [][] maze = getMaze("src/Input");
@@ -30,7 +21,7 @@ public class Main {
     }
 
 
-    public static void PrintPartTwo(ArrayList<String> path)
+    public static void PrintPartTwo(ArrayList<String> path) // formats answer so I can ctrl f in document
     {
         for (int i = 0; i < path.size(); i++)
         {
@@ -52,7 +43,7 @@ public class Main {
 
     public static ArrayList<String> fixPathPartTwo(ArrayList<String> path)
     {
-        for (int i = 0; i < path.size(); i++)
+        for (int i = 0; i < path.size(); i++) // replace all parentheses with nothing, allows me to parse pairs easier in the form x,y
         {
             path.set(i, path.get(i).replaceAll("\\(", ""));
             path.set(i, path.get(i).replaceAll("\\)", ""));
@@ -61,7 +52,7 @@ public class Main {
 
         for (int i = 0; i < path.size() - 1; i++)
         {
-            String[] pair1 = path.get(i).split(",");
+            String[] pair1 = path.get(i).split(","); // get pair 1 and pair 2 numbers
             String[] pair2 = path.get(i + 1).split(",");
             int p1y = Integer.parseInt(pair1[0]);
             int p1x = Integer.parseInt(pair1[1]);
@@ -69,6 +60,12 @@ public class Main {
             int p2x = Integer.parseInt(pair2[1]);
             if (!(Math.abs(p2y - p1y) <= 1 && Math.abs(p2x - p1x) == 0 ||
                     Math.abs(p2y - p1y) == 0 && Math.abs(p2x - p1x) <= 1))
+                // check if two coordinate pairs are not more than 1 movement away from each other.
+                /* (0,0) (2,0) returns false because abs p2x - p1x = 0
+                /* (0,0) (1,1) also returns false because abs p2y - p1y = 0, but p2x - p1x = 1
+                //
+
+                 */
             {
 
 //                System.out.println("hy");
@@ -77,8 +74,8 @@ public class Main {
                 String [] correctPairC = path.get(i + 1).split(",");
                 int correctY = Integer.parseInt(correctPairC[0]);
                 int correctX = Integer.parseInt(correctPairC[1]);
-                int indexEnd = i + 1;
-                int backwardsCount = 1;
+                int indexEnd = i + 1; // indexEnd is index of the number that we know must be in the list
+                int backwardsCount = 1; // b
 //                System.out.println(indexEnd);
 
                 while (true)

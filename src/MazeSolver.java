@@ -24,9 +24,9 @@ public class MazeSolver {
     public ArrayList<String> solve()
     {
         int reps = 0;
-        while (solved || reps < 1000)
+        while (solved || reps < 10000000)
         {
-            superMove();
+            complexMove();
             reps++;
             if (y == maze.length - 1 && x == maze[0].length - 1)
             {
@@ -54,7 +54,8 @@ public class MazeSolver {
 
 
 
-    public void superMove() // first check if a wall is left, if not turn ccw and move forward.
+    public void complexMove() // first check if a wall is left, if not turn ccw and move forward
+    // if a wall is left, move forward
             // if no wall, then check if you can move forward at all
             // if you can't keep rotating until you can
     {
