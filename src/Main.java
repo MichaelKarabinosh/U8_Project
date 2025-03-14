@@ -1,8 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
+
+import static java.util.Collections.replaceAll;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,58 +15,171 @@ public class Main {
 
 
 
-         String[][] maze = getMaze("src/Input");
-        System.out.println(partOne(maze, 0, 0));
+//         String[][] maze = getMaze("src/Input");
+//        System.out.println(partOne(maze, 0, 0));
 
-        System.out.println("hello");
+//        System.out.println("hello");
+         String [][] maze = getMaze("src/Input");
         MazeSolver parttwo = new MazeSolver(maze);
-        System.out.println(parttwo.solve());
+        ArrayList<String> pathWithoutDupes = parttwo.solve();
+        System.out.println(pathWithoutDupes);
+        ArrayList<String> pathWithoutDupesFixed = fixPathPartTwo(pathWithoutDupes);
+        PrintPartTwo(pathWithoutDupesFixed);
+
 
     }
 
-    public static ArrayList<String> partOne(String [][] maxe, int x, int y){
-        boolean mazeSolved = false;
-        int curx = x;
-        int cury = y;
-        ArrayList<String> path = new ArrayList<>();
-        path.add("(0,0)");
-        while (!mazeSolved)
+
+    public static void PrintPartTwo(ArrayList<String> path)
+    {
+        for (int i = 0; i < path.size(); i++)
         {
-               if (cury < maxe.length - 1 && maxe[cury + 1][curx].equals("."))
-               {
-                   maxe[cury][curx] = "#";
-                   cury++;
-               }
-               else if (cury > 0 &&maxe[cury - 1][curx].equals(".")) {
-                   maxe[cury][curx] = "#";
-                   cury--;
-               }
-               else if (curx > 0 && maxe[cury][curx - 1].equals(".")) {
 
-                   maxe[cury][curx] = "#";
-                   curx--;
-               }
-               else if (curx < maxe[0].length - 1 &&maxe[cury][curx + 1].equals("."))
-               {
-                   maxe[cury][curx] = "#";
-                   curx++;
-               }
-
-               String subPath = "(";
-            subPath += cury + ",";
-            subPath += curx + ")";
-            path.add(subPath);
-            subPath = "";
-            if (cury == maxe.length - 1)
+            if (i != path.size() - 1)
             {
-                if (curx == maxe[0].length - 1)
-                {
-                    mazeSolved = true;
-                }
+                System.out.print("(" + path.get(i).replace(",", ", ") + ") ---> ");
             }
+            else {
+                System.out.println("(" + path.get(i).replace(",", ", ") + ")");
+            }
+        }
+    }
+
+
+
+
+
+
+    public static ArrayList<String> fixPathPartTwo(ArrayList<String> path)
+    {
+        for (int i = 0; i < path.size(); i++)
+        {
+            path.set(i, path.get(i).replaceAll("\\(", ""));
+            path.set(i, path.get(i).replaceAll("\\)", ""));
+        }
+
+
+        for (int i = 0; i < path.size() - 1; i++)
+        {
+            String[] pair1 = path.get(i).split(",");
+            String[] pair2 = path.get(i + 1).split(",");
+            int p1y = Integer.parseInt(pair1[0]);
+            int p1x = Integer.parseInt(pair1[1]);
+            int p2y = Integer.parseInt(pair2[0]);
+            int p2x = Integer.parseInt(pair2[1]);
+            if (!(Math.abs(p2y - p1y) <= 1 && Math.abs(p2x - p1x) == 0 ||
+                    Math.abs(p2y - p1y) == 0 && Math.abs(p2x - p1x) <= 1))
+            {
+
+//                System.out.println("hy");
+                String correctPair = path.get(i + 1);
+//                System.out.println(correctPair);
+                String [] correctPairC = path.get(i + 1).split(",");
+                int correctY = Integer.parseInt(correctPairC[0]);
+                int correctX = Integer.parseInt(correctPairC[1]);
+                int indexEnd = i + 1;
+                int backwardsCount = 1;
+//                System.out.println(indexEnd);
+
+                while (true)
+                {
+                    if (indexEnd - backwardsCount >= 0) {
+                        pair1 = path.get(indexEnd - backwardsCount).split(",");
+                        p1y = Integer.parseInt(pair1[0]);
+                        p1x = Integer.parseInt(pair1[1]);
+//                        System.out.println(backwardsCount);
+//                        System.out.println(p1y + "p");
+//                        System.out.println(p1x);
+//                        System.out.println(backwardsCount);
+                        if (backwardsCount == 6 && correctX == 35)
+                        {
+                            System.out.println(Arrays.toString(pair1));
+                        }
+                        if ((Math.abs(correctY - p1y) <= 1 && Math.abs(correctX - p1x) == 0
+                        || Math.abs(correctY - p1y) == 0 && Math.abs(correctX - p1x) <= 1))
+                        {
+                            break;
+                        }
+                        backwardsCount++;
+                    }
+                }
+//                System.out.println(indexEnd - backwardsCount);
+//                System.out.println(path.size() + "lk");
+                if (correctX == 35)
+                {
+                    System.out.println(indexEnd - backwardsCount);
+                    System.out.println(path.get(indexEnd));
+                    System.out.println(backwardsCount);
+                    System.out.println(path.get(66));
+                }
+                for (int j = indexEnd; j > indexEnd - backwardsCount; j--)
+                {
+                    if (correctX == 35)
+                    {
+                        System.out.println(path.get(j));
+                    }
+                    path.remove(j);
+
+                }
+                path.add(indexEnd - backwardsCount + 1, correctPair);
+
+
+                i -= backwardsCount;
+//                System.out.println(path);
+            }
+
+
         }
         return path;
     }
+
+
+
+
+//    public static ArrayList<String> partOne(String [][] maxe, int x, int y){
+//        boolean mazeSolved = false;
+//        int curx = x;
+//        int cury = y;
+//        ArrayList<String> path = new ArrayList<>();
+//        path.add("(0,0)");
+//        while (!mazeSolved)
+//        {
+//            if (cury < maxe.length - 1 && maxe[cury + 1][curx].equals("."))
+//            {
+//                maxe[cury][curx] = "#";
+//                cury++;
+//            }
+//            else if (cury > 0 &&maxe[cury - 1][curx].equals(".")) {
+//                maxe[cury][curx] = "#";
+//                cury--;
+//            }
+//            else if (curx > 0 && maxe[cury][curx - 1].equals(".")) {
+//
+//                maxe[cury][curx] = "#";
+//                curx--;
+//            }
+//            else if (curx < maxe[0].length - 1 &&maxe[cury][curx + 1].equals("."))
+//            {
+//                maxe[cury][curx] = "#";
+//                curx++;
+//            }
+//
+//            String subPath = "(";
+//            subPath += cury + ",";
+//            subPath += curx + ")";
+//            path.add(subPath);
+//            subPath = "";
+//            if (cury == maxe.length - 1)
+//            {
+//                if (curx == maxe[0].length - 1)
+//                {
+//                    mazeSolved = true;
+//                }
+//            }
+//        }
+//        return path;
+//    }
+
 
 
 

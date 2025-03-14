@@ -15,6 +15,7 @@ public class MazeSolver {
 
     public MazeSolver(String [] [] maze)
     {
+        path.add("(0,0)");
         direction = 2;
         this.maze = maze;
     }
@@ -23,20 +24,46 @@ public class MazeSolver {
     public ArrayList<String> solve()
     {
         int reps = 0;
-        while (!solved || reps < 10000)
+        while (solved || reps < 1000)
         {
             superMove();
             reps++;
-            System.out.println(reps);
+            if (y == maze.length - 1 && x == maze[0].length - 1)
+            {
+              solved = true;
+              break;
+            }
+//            System.out.println(reps);
+//            System.out.println(reps);
+//            System.out.println(path);
         }
-        return path;
+        return removeDupes(path);
+    }
+
+
+    public ArrayList<String> removeDupes(ArrayList<String> path) {
+        ArrayList<String> dupesRemoved = new ArrayList<>();
+        for (String s : path) {
+            if (!(dupesRemoved.contains(s))) {
+                dupesRemoved.add(s);
+            }
+        }
+        return dupesRemoved;
     }
 
 
 
 
-    public void superMove()
+    public void superMove() // first check if a wall is left, if not turn ccw and move forward.
+            // if no wall, then check if you can move forward at all
+            // if you can't keep rotating until you can
     {
+//        System.out.println(x);
+//        System.out.println(y);
+//        System.out.println(direction);
+//        System.out.println(isWallLeft());
+//        System.out.println(canMoveForward());
+//        System.out.println(canMoveForward());
          if (isWallLeft())
          {
              if (canMoveForward())
@@ -44,40 +71,60 @@ public class MazeSolver {
                  simpleMove();
              }
              else {
-                 while (!canMoveForward())
-                 {
-                     directionChange();
-                 }
+                 do {
+                     directionBruteForce();
+                 } while (!canMoveForward());
                  simpleMove();
              }
          }
          else {
-            direction--;
+            turnCCW();
             simpleMove();
          }
+//        System.out.println(path.getLast());
     }
 
 
 
-    public void directionChange()
+    public void directionBruteForce()
+    {
+        if (direction != 4)
+        {
+            direction++;
+        }
+        else {
+            direction = 1;
+        }
+//        if (direction == 1)
+//        {
+//            direction = 2;
+//        }
+//        else if (direction == 2)
+//        {
+//            direction = 3;
+////            System.out.println(canMoveForward());
+//        }
+//        else if (direction == 3)
+//        {
+//            direction = 4;
+//        }
+//        else if (direction == 4)
+//        {
+//            direction = 1;
+//        }
+    }
+
+    public void turnCCW()
     {
         if (direction == 1)
         {
-            direction = 2;
-        }
-        if (direction == 2)
-        {
-            direction = 3;
-        }
-        if (direction == 3)
-        {
             direction = 4;
         }
-        if (direction == 4)
-        {
-            direction = 1;
+        else {
+            direction--;
         }
     }
+
 
 
     public void simpleMove()
@@ -108,80 +155,41 @@ public class MazeSolver {
     {
         if (direction == 1)
         {
-            if (x - 1 < 0 || maze[y][x-1].equals("#"))
-            {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return x - 1 < 0 || maze[y][x - 1].equals("#");
         }
-        if (direction == 2)
+       else  if (direction == 2)
         {
-            if (y - 1 < 0 || maze[y - 1][x].equals("#"))
-            {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return y - 1 < 0 || maze[y - 1][x].equals("#");
         }
-        if (direction == 3)
+        else if (direction == 3)
         {
-            if (x + 1 > maze[0].length || maze[y][x+1].equals("#"))
-            {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return x + 1 > maze[0].length || maze[y][x + 1].equals("#");
         }
-        if (direction == 4)
+        else if (direction == 4)
         {
-            if (y + 1 > maze.length || maze[y+1][x].equals("#"))
-            {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return y + 1 > maze.length || maze[y + 1][x].equals("#");
         }
         return false;
     }
 
     public boolean canMoveForward()
     {
-        if (direction == 1 && y - 1 > 0)
+        if (direction == 1 && y - 1 > -1) // if looking up and moving 1 up is ok
         {
-            if (maze[y - 1][x].equals("."))
-            {
-                return  true;
-            }
-            return false;
+           return maze[y - 1][x].equals(".");
         }
-        if (direction == 2 && x + 1 < maze[0].length)
+        if (direction == 2 && x + 1 < maze[0].length) // if looking right and moving 1 right is ok
         {
-            if (maze[y][x + 1].equals("."))
-            {
-                return  true;
-            }
-            return false;
+            return maze[y][x + 1].equals(".");
         }
-        if (direction == 3 && y + 1 < maze.length)
+        if (direction == 3 && y + 1 < maze.length) // if looking down and moving 1 down is ok
         {
-            if (maze[y + 1][x].equals("."))
-            {
-                return  true;
-            }
-            return false;
+            return  maze[y + 1][x].equals(".");
+
         }
-        if (direction == 4 && x - 1 > 0)
+        if (direction == 4 && x - 1 > -1) // if looking left and moving left 1 is ok
         {
-            if (maze[y][x - 1].equals("."))
-            {
-            return  true;
-            }
-            return false;
+            return maze[y][x - 1].equals(".");
         }
         return false;
     }
