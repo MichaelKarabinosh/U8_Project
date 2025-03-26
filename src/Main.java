@@ -40,14 +40,10 @@ public class Main {
 
 
 
-
     public static ArrayList<String> fixPathPartTwo(ArrayList<String> path)
     {
-        for (int i = 0; i < path.size(); i++) // replace all parentheses with nothing, allows me to parse pairs easier in the form x,y
-        {
-            path.set(i, path.get(i).replaceAll("\\(", ""));
-            path.set(i, path.get(i).replaceAll("\\)", ""));
-        }
+        // replace all parentheses with nothing, allows me to parse pairs easier in the form x,y
+        path.replaceAll(s -> s.replaceAll("\\(", "").replaceAll("\\)", ""));
 
 
         for (int i = 0; i < path.size() - 1; i++)
@@ -196,7 +192,7 @@ public class Main {
             fileData.add(s.nextLine());
 
         int rows = fileData.size();
-        int cols = fileData.get(0).length();
+        int cols = fileData.getFirst().length();
 
         String[][] maze = new String[rows][cols];
 

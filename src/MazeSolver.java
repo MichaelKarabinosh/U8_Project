@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 public class MazeSolver {
     int x = 0;
@@ -6,7 +7,7 @@ public class MazeSolver {
     boolean solved = false;
     ArrayList<String> path = new ArrayList<>();
     String [][] maze;
-    public int direction = 0;
+    public int direction;
     // 1 = up
     // 2= right
     // 3= down
@@ -24,7 +25,7 @@ public class MazeSolver {
     public ArrayList<String> solve()
     {
         int reps = 0;
-        while (solved || reps < 10000000)
+        while (solved || reps < 100000000)
         {
             complexMove();
             reps++;
@@ -42,14 +43,26 @@ public class MazeSolver {
 
 
     public ArrayList<String> removeDupes(ArrayList<String> path) {
-        ArrayList<String> dupesRemoved = new ArrayList<>();
-        for (String s : path) {
-            if (!(dupesRemoved.contains(s))) {
-                dupesRemoved.add(s);
-            }
-        }
-        return dupesRemoved;
+       return new ArrayList<String>(new LinkedHashSet<String>(path));
     }
+
+    public void effecientComplexMove()
+    {
+        if (!isWallLeft())
+        {
+            turnCCW();
+            simpleMove();
+        }
+        else if (canMoveForward())
+        {
+            simpleMove();
+        }
+        else {
+            turnCCW();
+            turnCCW();
+        }
+    }
+
 
 
 
@@ -89,13 +102,7 @@ public class MazeSolver {
 
     public void directionBruteForce()
     {
-        if (direction != 4)
-        {
-            direction++;
-        }
-        else {
-            direction = 1;
-        }
+        direction = (direction % 4) + 1;
 //        if (direction == 1)
 //        {
 //            direction = 2;
